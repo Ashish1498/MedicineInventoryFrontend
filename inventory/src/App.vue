@@ -6,7 +6,14 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  created () {
+    const token = localStorage.getItem('JWT_TOKEN')
+    this.$store.commit('setToken', token)
+    if (token === null) {
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
 

@@ -1,7 +1,9 @@
 
 <template>
   <div>
-    <navbar />
+    <div class="headcont">
+        Medicine Inventory
+    </div>
      <div class="cont">
       <div class="cont1"></div>
       <div class="cont2">
@@ -12,13 +14,13 @@
           <input type="password" v-model="confirmPassword" @keyup="mismatch" placeholder="Confirm Password" name="confirmpassword" class="input-css"><br>
           <ul type="none">
               <li>
-                  <input type="radio" id="Admin" name="Adm"><label for="Admin">Admin</label>
+                  <input type="radio" id="Admin" v-model="Adm" value="Admin" name="adm"><label for="Admin">Admin</label>
               </li>
               <li>
-                  <input type="radio" id="Employee" name="Adm"><label for="Employee">Employee</label>
+                  <input type="radio" id="Employee" v-model="Adm" value="Employee" name="adm"><label for="Employee">Employee</label>
               </li>
           </ul>
-          <button v-on:click="onsubmit">Register</button>
+          <button v-on:click="onsubmit()">Register</button>
       </div>
     </div>
   </div>
@@ -26,17 +28,14 @@
 
 <script>
 import axios from 'axios'
-import navbar from '@/components/navbar.vue'
 export default {
   name: 'homePage',
-  components: {
-    navbar: navbar
-  },
   data () {
     return {
       name: '',
       email: '',
-      password: ''
+      password: '',
+      Adm: ''
     }
   },
   validate () {
@@ -45,7 +44,6 @@ export default {
     }
   },
   onsubmit () {
-    this.age = this.findage()
     const obj = {
       name: this.name,
       email: this.email,
@@ -54,7 +52,8 @@ export default {
     if (this.validate()) {
       axios.post('http://10.177.68.60:8080/register', obj).then((res) => {
         console.log(res)
-        this.$router.push('/login')
+        if (this.Adm === 'Admin') this.$router.push('')
+        else this.$router.push('')
       })
     }
   }
@@ -62,6 +61,18 @@ export default {
 </script>
 
 <style>
+.headcont{
+    height: 50px;
+    background-color: #c2d4dd;
+    display: flex;
+    padding: 10px 10px;
+    justify-content:space-between;
+}
+body{
+    margin:0;
+    padding:0;
+    background-color: #b0aac0;
+}
 .cont{
     display:flex;
 }

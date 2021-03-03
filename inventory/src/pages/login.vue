@@ -1,45 +1,65 @@
 <template>
   <div>
       <div class="cont3">
-          <h1>Medicine Inventory</h1>
+          <div>Medicine Inventory</div>
+          <div>
+              <router-link to ="/homePage"><button>Register</button></router-link></div>
       </div>
       <div class="cont4">
-          <h2>Admin Login</h2>
+          <h2>Login Page</h2>
         <ul type="none" class="form4">
-          <li><input type="text" placeholder="Username" name="username1"></li>
-          <li><input type="password" placeholder="Password" name="password1"></li>
-          <li><input type="password" placeholder="Confirm Password" name="cpassword1"></li>
-          <button class="btn4">Login</button>
+          <li><input type="text" placeholder="Username" v-model="username"></li>
+          <li><input type="password" placeholder="Password" v-model="password"></li>
+          <li><input type="password" placeholder="Confirm Password" v-model="cpassword"></li>
+          <ul type="none">
+              <li>
+                  <input type="radio" id="Admin" v-model="Adm" value="Admin" name="adm"><label for="Admin">Admin</label>
+              </li>
+              <li>
+                  <input type="radio" id="Employee" v-model="Adm" value="Employee" name="adm"><label for="Employee">Employee</label>
+              </li>
+          </ul>
+          <button class="btn4" v-on:click="onsubmit()">Login</button>
         </ul>
        </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      username1: '',
-      password1: ''
+      username: '',
+      password: '',
+      cpassword: '',
+      Adm: ''
     }
   },
-  validate () {
-    if (this.password1 !== this.cpassword1) {
-      return false
-    }
+  computed: {
+    ...mapGetters(['getUsername', 'getPassword'])
   },
-  onsubmit () {
-    this.age = this.findage()
-    const obj = {
-      username1: this.username1,
-      password1: this.password1
-    }
-    if (this.validate()) {
-      axios.post('http://10.177.68.60:8080/register', obj).then((res) => {
-        console.log(res)
-        this.$router.push('/login')
-      })
+  methods: {
+    validate () {
+      if (this.password !== this.cpassword) {
+        console.log('diff pass')
+        return false
+      } else if (this.password === this.cpassword) {
+        console.log('same')
+        return true
+      }
+    },
+    onsubmit () {
+      if (this.validate()) {
+        this.$store.dispatch('login', {
+          username: this.username,
+          password: this.password
+        })
+      }
+      if (this.Adm === 'Admin') this.$router.push('')
+      else this.$router.push('')
+      console.log(this.$store.getUsername)
+      console.log(this.$store.getPassword)
     }
   }
 }
@@ -51,7 +71,8 @@ export default {
     background-color: #c2d4dd;
     display: flex;
     padding: 10px 10px;
-    justify-content:center;
+    justify-content:space-around;
+    align-items: flex-end;
 }
 .cont4{
     height: 400px;
